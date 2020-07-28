@@ -221,8 +221,7 @@ def lorentz_factor(v1, v2, v3):
     return gamma
 
 
-@jit
-def v0(g_cov_mat, v1, v2, v3):
+def v0(g_cov_mat, v1, v2, v3, time_like=True):
     """
     Utility function to return Timelike component (v0) of 4-Velocity
     Assumes a (+, -, -, -) Metric Signature
@@ -239,6 +238,12 @@ def v0(g_cov_mat, v1, v2, v3):
         Second component of 3-Velocity
     v3 : float
         Third component of 3-Velocity
+    time_like : bool, optional
+        Determines type of Geodesic
+        ``True`` for Time-like geodesics
+        ``False`` for Null-like geodesics
+        Defaults to ``True``
+
     Returns
     -------
     float
@@ -247,7 +252,7 @@ def v0(g_cov_mat, v1, v2, v3):
     """
     g = g_cov_mat
     # Factor to add to coefficient, C
-    fac = -1 * _c ** 2
+    fac = -1 * _c ** 2 if time_like else 0
     # Defining coefficients for quadratic equation
     A = g[0, 0]
     B = 2 * (g[0, 1] * v1 + g[0, 2] * v2 + g[0, 3] * v3)

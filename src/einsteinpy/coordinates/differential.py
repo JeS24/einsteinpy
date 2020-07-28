@@ -101,8 +101,16 @@ class CartesianDifferential(CartesianConversion):
         Parameters
         ----------
         args : tuple
-            1-tuple containing the ~einsteinpy.metric.* object, \
-            in which the coordinates are defined
+            2-tuple containing the parameters, described below
+
+        Other Parameters
+        ________________
+        ~einsteinpy.metric.*
+            Metric, in which the coordinates are defined
+        time_like : bool
+            Determines type of Geodesic
+            ``True`` for Time-like geodesics
+            ``False`` for Null-like geodesics
 
         Raises
         ------
@@ -111,7 +119,7 @@ class CartesianDifferential(CartesianConversion):
             other than Cartesian Coordinates.
 
         """
-        g = args[0]
+        g, time_like = args[0], args[1]
         if self.system != g.coords.system:
             raise TypeError(
                 "Metric object has been instantiated with a coordinate system,"
@@ -120,11 +128,17 @@ class CartesianDifferential(CartesianConversion):
 
         g_cov_mat = g.metric_covariant(self.position())
 
-        v_t = v0(g_cov_mat, self.v_x.si.value, self.v_y.si.value, self.v_z.si.value)
+        v_t = v0(
+            g_cov_mat,
+            self.v_x.si.value,
+            self.v_y.si.value,
+            self.v_z.si.value,
+            time_like=time_like,
+        )
 
         self._v_t = v_t * u.m / u.s
 
-    def velocity(self, metric):
+    def velocity(self, metric, time_like=True):
         """
         Returns Velocity 4-Vector in SI units
 
@@ -132,6 +146,11 @@ class CartesianDifferential(CartesianConversion):
         ----------
         metric : ~einsteinpy.metric.*
             Metric object, in which the coordinates are defined
+        time_like : bool
+            Determines type of Geodesic
+            ``True`` for Time-like geodesics
+            ``False`` for Null-like geodesics
+            Defaults to ``True``
 
         Returns
         -------
@@ -140,7 +159,7 @@ class CartesianDifferential(CartesianConversion):
 
         """
         # Setting _v_t
-        self.v_t = (metric,)
+        self.v_t = (metric, time_like)
 
         return (
             self._v_t.value,
@@ -313,8 +332,16 @@ class SphericalDifferential(SphericalConversion):
         Parameters
         ----------
         args : tuple
-            1-tuple containing the ~einsteinpy.metric.* object, \
-            in which the coordinates are defined
+            2-tuple containing the parameters, described below
+
+        Other Parameters
+        ________________
+        ~einsteinpy.metric.*
+            Metric, in which the coordinates are defined
+        time_like : bool
+            Determines type of Geodesic
+            ``True`` for Time-like geodesics
+            ``False`` for Null-like geodesics
 
         Raises
         ------
@@ -323,7 +350,7 @@ class SphericalDifferential(SphericalConversion):
             other than Cartesian Coordinates.
 
         """
-        g = args[0]
+        g, time_like = args[0], args[1]
         if self.system != g.coords.system:
             raise TypeError(
                 "Metric object has been instantiated with a coordinate system,"
@@ -332,11 +359,17 @@ class SphericalDifferential(SphericalConversion):
 
         g_cov_mat = g.metric_covariant(self.position())
 
-        v_t = v0(g_cov_mat, self.v_r.si.value, self.v_th.si.value, self.v_p.si.value)
+        v_t = v0(
+            g_cov_mat,
+            self.v_r.si.value,
+            self.v_th.si.value,
+            self.v_p.si.value,
+            time_like=time_like,
+        )
 
         self._v_t = v_t * u.m / u.s
 
-    def velocity(self, metric):
+    def velocity(self, metric, time_like=True):
         """
         Returns Velocity 4-Vector in SI units
 
@@ -344,6 +377,11 @@ class SphericalDifferential(SphericalConversion):
         ----------
         metric : ~einsteinpy.metric.*
             Metric object, in which the coordinates are defined
+        time_like : bool
+            Determines type of Geodesic
+            ``True`` for Time-like geodesics
+            ``False`` for Null-like geodesics
+            Defaults to ``True``
 
         Returns
         -------
@@ -352,7 +390,7 @@ class SphericalDifferential(SphericalConversion):
 
         """
         # Setting _v_t
-        self.v_t = (metric,)
+        self.v_t = (metric, time_like)
 
         return (
             self._v_t.value,
@@ -525,8 +563,16 @@ class BoyerLindquistDifferential(BoyerLindquistConversion):
         Parameters
         ----------
         args : tuple
-            1-tuple containing the ~einsteinpy.metric.* object, \
-            in which the coordinates are defined
+            2-tuple containing the parameters, described below
+
+        Other Parameters
+        ________________
+        ~einsteinpy.metric.*
+            Metric, in which the coordinates are defined
+        time_like : bool
+            Determines type of Geodesic
+            ``True`` for Time-like geodesics
+            ``False`` for Null-like geodesics
 
         Raises
         ------
@@ -535,7 +581,7 @@ class BoyerLindquistDifferential(BoyerLindquistConversion):
             other than Cartesian Coordinates.
 
         """
-        g = args[0]
+        g, time_like = args[0], args[1]
         if self.system != g.coords.system:
             raise TypeError(
                 "Metric object has been instantiated with a coordinate system,"
@@ -544,11 +590,17 @@ class BoyerLindquistDifferential(BoyerLindquistConversion):
 
         g_cov_mat = g.metric_covariant(self.position())
 
-        v_t = v0(g_cov_mat, self.v_r.si.value, self.v_th.si.value, self.v_p.si.value)
+        v_t = v0(
+            g_cov_mat,
+            self.v_r.si.value,
+            self.v_th.si.value,
+            self.v_p.si.value,
+            time_like=time_like,
+        )
 
         self._v_t = v_t * u.m / u.s
 
-    def velocity(self, metric):
+    def velocity(self, metric, time_like=True):
         """
         Returns Velocity 4-Vector in SI units
 
@@ -556,6 +608,11 @@ class BoyerLindquistDifferential(BoyerLindquistConversion):
         ----------
         metric : ~einsteinpy.metric.*
             Metric object, in which the coordinates are defined
+        time_like : bool
+            Determines type of Geodesic
+            ``True`` for Time-like geodesics
+            ``False`` for Null-like geodesics
+            Defaults to ``True``
 
         Returns
         -------
@@ -564,7 +621,7 @@ class BoyerLindquistDifferential(BoyerLindquistConversion):
 
         """
         # Setting _v_t
-        self.v_t = (metric,)
+        self.v_t = (metric, time_like)
 
         return (
             self._v_t.value,
